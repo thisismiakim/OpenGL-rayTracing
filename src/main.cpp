@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
         ClearScreen(app.render);
 
         // Check and process I/O events
+        // key events
         if (SDL_PollEvent(&event))
         {
             switch (event.type)// 
@@ -47,6 +48,11 @@ int main(int argc, char *argv[])
                     break;
             }
         }
+
+        // Draw the new content on the renderer
+        DrawSquare(app.square.xpos, app.square.ypos);
+        
+
 
         // Update the screen with the content rendered in the background buffer
         SDL_RenderPresent(app.render);

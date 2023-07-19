@@ -9,6 +9,9 @@
 #include "graphic.h"
 #include "object.h"
 #include "app.h"
+#include "graphicFunctions.h"
+#include "appFunctions.h"
+
 
 
 // Clearing Renderer
@@ -30,9 +33,12 @@ void DrawSquare(int x, int y)
     rect.y = y - (app.square.HEIGHT /2);
     rect.w = app.square.WIDTH;
     rect.h = app.square.HEIGHT;
+
+    // Define the green color on the renderer
+    SDL_SetRenderDrawColor(app.render, Colors::GREEN.r, Colors::GREEN.g, Colors::GREEN.b, Colors::GREEN.a);
+    // Ask the renderer to fill the rect with the green color
+    SDL_RenderFillRect(app.render, &rect);
 }
-
-
 
 
 #endif
