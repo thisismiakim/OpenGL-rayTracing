@@ -1,7 +1,7 @@
 SRC_DIR = src
 BUILD_DIR = build/debug
 CC = g++
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
+SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/glad.c)
 OBJ_NAME = play
 INCLUDE_PATHS = -Iinclude -framework Cocoa -framework OpenGL -framework IOKit
 LIBRARY_PATHS = -Llib
