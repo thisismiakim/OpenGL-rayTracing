@@ -11,6 +11,7 @@
 /* include header files */
 #include "Trace.h"
 #include "RGB.h"
+#include "Shader.h"
 
 
 
