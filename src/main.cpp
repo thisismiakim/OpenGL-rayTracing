@@ -8,14 +8,27 @@
 #include <fstream>
 #include <sstream>
 
+/* include header files */
+#include "Trace.h"
+#include "RGB.h"
+
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 
+// Global Variables
 // window setting global variables
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 800;
+
+Point intersect, tmp1, tmp2, cam, point, center[4]; // 3차원 좌표
+RGB color, shade, obj[4]; // RGB 색상
+Vec3 dir, normal, vec; // 3차원 벡터
+//Phong ps[4]; // phong shading
+//Sphere3D spheres[4]; // 구체 3차원
+//Ray3D ray, shadow; // 광선
 
 // Image processing matrix
 unsigned char image[SCREEN_HEIGHT][SCREEN_WIDTH][3];
