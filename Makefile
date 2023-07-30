@@ -3,9 +3,9 @@ BUILD_DIR = build/debug
 CC = g++
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/glad.c)
 OBJ_NAME = play
-INCLUDE_PATHS = -Iinclude -framework Cocoa -framework OpenGL -framework IOKit
+INCLUDE_PATHS = -Iinclude
 LIBRARY_PATHS = -Llib
-COMPILER_FLAGS = -std=c++11 -Wall -O0 -g
+COMPILER_FLAGS = -std=c++11 -Wall -O0 -g -Wno-deprecated
 LINKER_FLAGS = -lsdl2 -lglfw
 
 all:
