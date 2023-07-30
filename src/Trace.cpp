@@ -109,3 +109,81 @@ Point Ray::get_sample(float t)
 	result.set(point.px + t*dir.vx, point.py + t*dir.vy, point.pz + t*dir.vz);
 	return result;
 }
+
+
+//----------------------------------------------
+void Sphere::set(Point p, float r)
+{
+	center = p;
+	radius = r;
+}
+
+//----------------------------------------------
+string Sphere::print()
+{
+	center.print();
+	cout << " " << radius;
+	return "";
+}
+
+//----------------------------------------------
+bool Sphere::sphereIntersect(Ray ray, Point &point, Vec3 &normal)
+{
+	// Define oc vector
+	Point p1 = center;
+	Point p2 = ray.point;
+	Vec3 oc;
+	oc.set(p2.px - p1.px, p2.py - p1.py, p2.pz - p1.pz);
+
+	// Calculate quadratic equation 
+	float A = ray.dir.dot(ray.dir);
+	float B = 2 * oc.dot(ray.dir);
+	float C = oc.dot(oc) - radius*radius;
+	// cout << "A = " << A << endl;
+	// cout << "B = " << B << endl;
+	// cout << "C = " << C << endl;
+
+	// Solve quadratic equation for intersection points
+	float discriminant = B*B - 4 * A*C;
+	// cout << "discriminant = " << discriminant << endl;
+	if (discriminant >= 0)
+	{
+		// Calculate two roots
+		float root1 = (-B - sqrt(discriminant)) / 2 * A;
+		float root2 = (-B + sqrt(discriminant)) / 2 * A;
+		// cout << "root1 = " << root1 << endl;
+		// cout << "root2 = " << root2 << endl;
+		float solution = 0;
+
+		// No positive roots found
+		if ((root1 < 0) && (root2 < 0))
+			return false;
+
+		// One positive root
+		else if ((root1 < 0) && (root2 >= 0))
+			solution = root2;
+
+		// One positive root
+		else if ((root2 < 0) && (root1 >= 0))
+			solution = root1;
+
+		// Two positive roots
+		else if (root1 <= root2)
+			solution = root1;
+
+		// Two positive roots
+		else if (root2 <= root1)
+			solution = root2;
+
+		// Get intersection point
+		point = ray.get_sample(solution);
+
+		// Get surface normal
+		normal.set(point.px - center.px, point.py - center.py, point.pz - center.pz);
+		normal.normalize();
+		return true;
+	}
+	return false;
+}
+
+

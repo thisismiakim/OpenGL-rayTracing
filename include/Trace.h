@@ -42,5 +42,12 @@ class Ray{
         Point get_sample(float t);
 };
 
-class Sphere
+class Sphere{
+    public:
+        Point center;
+        float radius;
+        void set(Point p, float r);
+        string print();
+        bool sphereIntersect(Ray ray, Point &point, Vec3 &normal);
+};
 #endif
