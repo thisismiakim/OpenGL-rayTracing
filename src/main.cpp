@@ -1,3 +1,6 @@
+// 1. Open GL window
+// 2. class 선언
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -23,42 +26,56 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\n\0";
 
+
+
+
+// -------------------
+
+
+
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
+    // Initialise GLFW 
     glfwInit();
+    // Setting Up OpenGL context version to 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    // MacOS option
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    /* Create a window using GLFW */ 
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, 
+                                          SCR_HEIGHT, 
+                                          "RayTracing", NULL, NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        std::cout << "[ERROR] Failed to create GLFW window." << std::endl;
         glfwTerminate();
         return -1;
     }
+    // Set the current context to the window
     glfwMakeContextCurrent(window);
+    // Set callback function for resizing the window
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
+
+
+    /* Initialise GLAD.*/
+    // GLAD library manages function pointers for OpenGL, handling OS-specific quirks
+    // 오픈 지엘 함수 포인터 로드
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "[ERROR] Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
 
-    // build and compile our shader program
-    // ------------------------------------
+
+    /* Shader Program build and compile */
     // vertex shader
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -72,6 +89,8 @@ int main()
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
+
+
     // fragment shader
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
@@ -83,6 +102,8 @@ int main()
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
+
+
     // link shaders
     unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
@@ -128,51 +149,52 @@ int main()
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // render loop
-    // -----------
+
+
+
+
+
+
+
+    /* Render Loop */
     while (!glfwWindowShouldClose(window))
     {
-        // input
-        // -----
+        // Process user input
         processInput(window);
 
-        // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // Render the screen
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 컬러값 지정해서 넣기
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // draw our first triangle
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        // glBindVertexArray(0); // no need to unbind it every time 
+        // ----------------------------------------------------------------------------
+        // Drawing Functions here ...
+
  
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        
         // -------------------------------------------------------------------------------
+        // Swap the buffers and poll I/O events
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
+    // Clean up
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
-
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+
+// ----------- key event ----------------------
+// 사용자 입력 처리: GLFW가 해당 프레임에서 관련 키가 눌림/해제됐는지 쿼리하고 그에 따라 반응
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
+// glfw: 창의 크기가 변경될 때 (OS 또는 사용자 리사이즈에 의해) 이 콜백 함수 실행
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
